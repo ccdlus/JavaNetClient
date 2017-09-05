@@ -198,13 +198,25 @@ public class Controller {
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
 			String output;
+			StringBuilder jsonOutput = new StringBuilder("");
 			System.out.println("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
-				System.out.println(output);
+				jsonOutput.append(output);
 			}
+			
+			System.out.println(jsonOutput);
 
-//			conn.disconnect();
-    
+			// map json string to object
+			ObjectMapper mapper = new ObjectMapper();
+			Subject subject = mapper.readValue(jsonOutput.toString(), Subject.class);
+			
+			System.out.println("SUBJECT_DOC_NO: " + subject.getSubjectDocNo());
+			System.out.println("SUBJECT_ID: " + subject.getSubjectId());
+			System.out.println("SUBJECT_NAME: " + subject.getSubjectName());
+
+			//Pretty print
+			String prettyStaff1 = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(subject);
+			System.out.println(prettyStaff1);
 
 
 		} catch (MalformedURLException e) {
